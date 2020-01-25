@@ -1,5 +1,15 @@
 # Compiled class file
+/target/
+/.metadata/
+/RemoteSystemsTempFiles/
+.classpath
+.project
 *.class
+.settings 
+*.prefs
+*.component
+*.lst
+
 
 # Log file
 *.log
