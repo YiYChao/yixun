@@ -1,0 +1,128 @@
+{
+  "id": "1621666",
+  "name": "yixun",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "668814",
+      "name": "personal",
+      "font_class": "personal",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "5387406",
+      "name": "服务流",
+      "font_class": "fuwuliu",
+      "unicode": "eaca",
+      "unicode_decimal": 60106
+    },
+    {
+      "icon_id": "5387488",
+      "name": "运算操作",
+      "font_class": "yunsuancaozuo",
+      "unicode": "eae7",
+      "unicode_decimal": 60135
+    },
+    {
+      "icon_id": "5387537",
+      "name": "灵感",
+      "font_class": "linggan",
+      "unicode": "eaf8",
+      "unicode_decimal": 60152
+    },
+    {
+      "icon_id": "5387650",
+      "name": "个人头像",
+      "font_class": "gerentouxiang",
+      "unicode": "eb24",
+      "unicode_decimal": 60196
+    },
+    {
+      "icon_id": "5387653",
+      "name": "群组",
+      "font_class": "qunzu",
+      "unicode": "eb25",
+      "unicode_decimal": 60197
+    },
+    {
+      "icon_id": "5635214",
+      "name": "通讯18",
+      "font_class": "tongxun",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "6966138",
+      "name": "小组",
+      "font_class": "xiaozu",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "12773673",
+      "name": "f-share",
+      "font_class": "f-share",
+      "unicode": "e76a",
+      "unicode_decimal": 59242
+    },
+    {
+      "icon_id": "12773708",
+      "name": "f-circle",
+      "font_class": "f-circle",
+      "unicode": "e78d",
+      "unicode_decimal": 59277
+    },
+    {
+      "icon_id": "12773716",
+      "name": "f-eye3",
+      "font_class": "f-eye1",
+      "unicode": "e794",
+      "unicode_decimal": 59284
+    },
+    {
+      "icon_id": "12773725",
+      "name": "f-eye2",
+      "font_class": "f-eye2",
+      "unicode": "e796",
+      "unicode_decimal": 59286
+    },
+    {
+      "icon_id": "12773729",
+      "name": "f-fire",
+      "font_class": "f-fire",
+      "unicode": "e797",
+      "unicode_decimal": 59287
+    },
+    {
+      "icon_id": "12773744",
+      "name": "f-news",
+      "font_class": "f-news",
+      "unicode": "e79c",
+      "unicode_decimal": 59292
+    },
+    {
+      "icon_id": "12799144",
+      "name": "gpfx",
+      "font_class": "gpfx",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "12886742",
+      "name": "ic_ IOT",
+      "font_class": "ic_IOT",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "12886754",
+      "name": "ic_emer",
+      "font_class": "ic_emer",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    }
+  ]
+}

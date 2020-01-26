@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/><br />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="fonts/iconfont.css" />
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+      	mui.plusReady(function(){
+      		plus.navigator.setStatusBarStyle("dark");
+      		plus.navigator.setStatusBarBackground("rgb(27,149,154)");
+      	});
+    </script>
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav title">
+	    <h1 class="mui-title title-color">易讯</h1>
+	</header>
+	
+	<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item mui-active" tabIndex="0">
+	        <span class="mui-icon iconfont icon-fuwuliu"></span>
+	        <span class="mui-tab-label">易讯</span>
+	    </a>
+	    <a class="mui-tab-item" tabIndex="1">
+	        <span class="mui-icon iconfont icon-qunzu"></span>
+	        <span class="mui-tab-label">通讯录</span>
+	    </a>
+	    <a class="mui-tab-item" tabIndex="2">
+	        <span class="mui-icon iconfont icon-yunsuancaozuo"></span>
+	        <span class="mui-tab-label">发现</span>
+	    </a>
+	    <a class="mui-tab-item" tabIndex="3">
+	        <span class="mui-icon iconfont icon-gerentouxiang"></span>
+	        <span class="mui-tab-label">我</span>
+	    </a>
+	</nav>
+	
+	<script type="text/javascript">
+		var yixunArray = [
+		{pageId : "yixun-chatlist.html", pageUrl : "yixun-chatlist.html"},
+		{pageId : "yixun-contact.html", pageUrl : "yixun-contact.html"},
+		{pageId : "yixun-discover.html", pageUrl : "yixun-discover.html"},
+		{pageId : "yixun-me.html", pageUrl : "yixun-me.html"}
+		];
+		var yixunStyle = {
+			top : "44px",
+			bottom : "50px"
+		};
+		mui.plusReady(function(){
+			// 禁止返回到登录注册页面
+			mui.back = function() {
+				return false;
+			}
+			
+			// 获取当前的webview对象
+			var currentWebview = plus.webview.currentWebview();
+			// 向当前主页对象追加4张webview对象子页
+			for (var i = 0; i < yixunArray.length; i++) {
+				var yixunPage = plus.webview.create(yixunArray[i].pageUrl, yixunArray[i].pageId, yixunStyle);
+				// 隐藏新增的窗口
+				yixunPage.hide();
+				//将新创建的子页面追加到主页面
+				currentWebview.append(yixunPage);
+			}
+			// 显示第一个页面
+			plus.webview.show(yixunArray[0].pageId);
+		});
+		mui(".mui-bar-tab").on("tap", "a", function(){
+			var tabIndex = this.getAttribute("tabIndex");
+			plus.webview.show(yixunArray[tabIndex].pageId, "fade-in", 200);
+			// 将其它的页面隐藏
+			for (var i = 0; i < yixunArray.length; i++) {
+				if(i != tabIndex){
+					plus.webview.hide(yixunArray[i].pageId, "fade-out", 200);
+				}
+			}
+		});
+	</script>
+	
+</body>
+</html>

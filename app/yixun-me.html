@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/registLogin/util.css" />
+	</head>
+
+	<body>
+		
+		<ul class="mui-table-view">
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="javascript:;">
+		        	<span class="mui-pull-right mui-icon mui-icon-arrowright lh-43 m-l-4" style="color: lightgray;"></span>
+		            <img class="mui-media-object mui-pull-right" src="css/registLogin/arrow.jpg">
+		            <div class="mui-media-body lh-43 fs-16" id="faceImage">头像</div>
+		        </a>
+		    </li>
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="javascript:;">
+		            <span class="mui-pull-right mui-icon mui-icon-arrowright lh-43 m-l-4" style="color: lightgray;"></span>
+		            <span class="mui-pull-right lh-43 m-l-4" style="color: lightgray;" id="nickname">易讯</span>
+		            <div class="mui-media-body lh-43 fs-16">昵称</div>
+		        </a>
+		    </li>
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="javascript:;">
+		        	<span class="mui-pull-right lh-43 m-l-4" style="color: lightgray;" id="username">yixun</span>
+		            <div class="mui-media-body lh-43 fs-16">易讯号</div>
+		        </a>
+		    </li>
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="javascript:;">
+		        	<span class="mui-pull-right mui-icon mui-icon-arrowright lh-43 m-l-4" style="color: lightgray;"></span>
+		            <img class="mui-media-object mui-pull-right m-t-11" src="image/qrcode.png" style="max-width: 20px;height: 20px;">
+		            <div class="mui-media-body lh-43 fs-16" id="meQrcode">我的二维码</div>
+		        </a>
+		    </li>
+		</ul>
+		<br /><br />
+		<ul class="mui-table-view">
+		    <li class="mui-table-view-cell mui-media">
+		        <a href="javascript:;" id="logout">
+		            <div class="mui-media-body lh-33" style="text-align: center;">退出登录</div>
+		        </a>
+		    </li>
+		</ul>
+		<script type="text/javascript" src="js/app.js" ></script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function(){
+				// 获得当前webview，刷新当前信息
+				var meWebview = plus.webview.currentWebview();
+				meWebview.addEventListener("show", function(){
+					refreshUserInfo();
+				});
+				
+				// 用户退出
+				var logout = document.getElementById("logout");
+				logout.addEventListener("tap", function(){
+					app.userLogout();	// 移除内存
+					mui.openWindow("login.html", "login.html");
+				});
+			});
+			
+			// 刷新用户信息
+			function refreshUserInfo(){
+				var user = app.getUserGlobalInfo();
+				if(user != null){
+					var faceImage = user.faceImage;
+					var nickname = user.nickname;
+					var username = user.username;
+					
+					var span_nickname = document.getElementById("nickname");
+					var span_username = document.getElementById("username");
+					
+					span_nickname.innerHTML = nickname;
+					span_username.innerHTML = username;
+					
+					if (app.isNotNull(faceImage)) {
+						var img_my_face = document.getElementById("faceImage");
+						img_my_face.src = app.imgServerUrl + faceImage;
+					}
+				}
+			}
+		</script>
+	</body>
+
+</html>

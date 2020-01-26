@@ -1,0 +1,15 @@
+.title{
+	background-color: rgb(27,149,154);
+}
+.title-color{
+	color: white;
+}
+.mui-bar-tab .mui-tab-item.mui-active{
+	color: rgb(27,149,154);
+}
+.l-h-44{
+	line-height: 44px;
+}
+.f-s-16{
+	font-size: 16px;
+}

@@ -1,0 +1,24 @@
+{
+	"index.html": {
+		"resources": [
+			"yixun-chatlist.html"
+		],
+		"refer": [
+			"yixun-discover.html",
+			"yixun-contact.html",
+			"yixun-me.html",
+			"yixun-chatlist.html"
+		]
+	},
+	"login.html": {
+		"refer": [
+			"login.html",
+			"index.html"
+		]
+	},
+	"yixun-me.html": {
+		"refer": [
+			"login.html"
+		]
+	}
+}
