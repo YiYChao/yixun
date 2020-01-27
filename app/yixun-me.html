@@ -13,7 +13,7 @@
 		
 		<ul class="mui-table-view">
 		    <li class="mui-table-view-cell mui-media">
-		        <a href="javascript:;">
+		        <a href="javascript:;" id="a_myface">
 		        	<span class="mui-pull-right mui-icon mui-icon-arrowright lh-43 m-l-4" style="color: lightgray;"></span>
 		            <img class="mui-media-object mui-pull-right" src="css/registLogin/arrow.jpg">
 		            <div class="mui-media-body lh-43 fs-16" id="faceImage">头像</div>
@@ -58,6 +58,12 @@
 				meWebview.addEventListener("show", function(){
 					refreshUserInfo();
 				});
+				
+				// 跳转到我的头像界面
+				var a_myface = document.getElementById("a_myface");
+				a_myface.addEventListener("tap", function(){
+					mui.openWindow("myface.html", "myface.html");
+				})
 				
 				// 用户退出
 				var logout = document.getElementById("logout");

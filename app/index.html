@@ -22,19 +22,19 @@
 	</header>
 	
 	<nav class="mui-bar mui-bar-tab">
-	    <a class="mui-tab-item mui-active" tabIndex="0">
+	    <a class="mui-tab-item mui-active" tabIndex="0" style="touch-action: none;">
 	        <span class="mui-icon iconfont icon-fuwuliu"></span>
 	        <span class="mui-tab-label">易讯</span>
 	    </a>
-	    <a class="mui-tab-item" tabIndex="1">
+	    <a class="mui-tab-item" tabIndex="1" style="touch-action: none;">
 	        <span class="mui-icon iconfont icon-qunzu"></span>
 	        <span class="mui-tab-label">通讯录</span>
 	    </a>
-	    <a class="mui-tab-item" tabIndex="2">
+	    <a class="mui-tab-item" tabIndex="2" style="touch-action: none;">
 	        <span class="mui-icon iconfont icon-yunsuancaozuo"></span>
 	        <span class="mui-tab-label">发现</span>
 	    </a>
-	    <a class="mui-tab-item" tabIndex="3">
+	    <a class="mui-tab-item" tabIndex="3" style="touch-action: none;">
 	        <span class="mui-icon iconfont icon-gerentouxiang"></span>
 	        <span class="mui-tab-label">我</span>
 	    </a>
@@ -79,7 +79,7 @@
 					plus.webview.hide(yixunArray[i].pageId, "fade-out", 200);
 				}
 			}
-		});
+		},{passive: false});
 	</script>
 	
 </body>
