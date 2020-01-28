@@ -15,12 +15,12 @@
 		    <li class="mui-table-view-cell mui-media">
 		        <a href="javascript:;" id="a_myface">
 		        	<span class="mui-pull-right mui-icon mui-icon-arrowright lh-43 m-l-4" style="color: lightgray;"></span>
-		            <img class="mui-media-object mui-pull-right" src="css/registLogin/arrow.jpg">
-		            <div class="mui-media-body lh-43 fs-16" id="faceImage">头像</div>
+		            <img class="mui-media-object mui-pull-right" src="css/registLogin/arrow.jpg" id="faceImage">
+		            <div class="mui-media-body lh-43 fs-16">头像</div>
 		        </a>
 		    </li>
 		    <li class="mui-table-view-cell mui-media">
-		        <a href="javascript:;">
+		        <a href="javascript:;" id="a_nickName">
 		            <span class="mui-pull-right mui-icon mui-icon-arrowright lh-43 m-l-4" style="color: lightgray;"></span>
 		            <span class="mui-pull-right lh-43 m-l-4" style="color: lightgray;" id="nickname">易讯</span>
 		            <div class="mui-media-body lh-43 fs-16">昵称</div>
@@ -32,7 +32,7 @@
 		            <div class="mui-media-body lh-43 fs-16">易讯号</div>
 		        </a>
 		    </li>
-		    <li class="mui-table-view-cell mui-media">
+		    <li class="mui-table-view-cell mui-media" id="a_qrcode">
 		        <a href="javascript:;">
 		        	<span class="mui-pull-right mui-icon mui-icon-arrowright lh-43 m-l-4" style="color: lightgray;"></span>
 		            <img class="mui-media-object mui-pull-right m-t-11" src="image/qrcode.png" style="max-width: 20px;height: 20px;">
@@ -63,13 +63,30 @@
 				var a_myface = document.getElementById("a_myface");
 				a_myface.addEventListener("tap", function(){
 					mui.openWindow("myface.html", "myface.html");
-				})
+				});
+				
+				// 跳转到设置昵称界面
+				var a_nickName = document.getElementById("a_nickName");
+				a_nickName.addEventListener("tap", function(){
+					mui.openWindow("mynickname.html", "mynickname.html");
+				});
+				
+				// 跳转到用户二维码界面
+				var a_qrcode = document.getElementById("a_qrcode");
+				a_qrcode.addEventListener("tap",function(){
+					mui.openWindow("myQRCode.html", "myQRCode.html");
+				});
 				
 				// 用户退出
 				var logout = document.getElementById("logout");
 				logout.addEventListener("tap", function(){
 					app.userLogout();	// 移除内存
 					mui.openWindow("login.html", "login.html");
+				});
+				
+				// 添加自定义事件，刷新头像大图
+				window.addEventListener("refresh", function(){
+					refreshUserInfo();
 				});
 			});
 			

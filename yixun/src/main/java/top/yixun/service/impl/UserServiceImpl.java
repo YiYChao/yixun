@@ -1,17 +1,28 @@
 package top.yixun.service.impl;
 
+import java.util.Date;
+
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
+import top.yixun.enums.SearchFriendsStatusEnum;
+import top.yixun.mapper.FriendsRequestMapper;
+import top.yixun.mapper.MyFriendsMapper;
 import top.yixun.mapper.UsersMapper;
+import top.yixun.pojo.FriendsRequest;
+import top.yixun.pojo.MyFriends;
 import top.yixun.pojo.Users;
 import top.yixun.service.UserService;
+import top.yixun.utils.FastDFSClient;
+import top.yixun.utils.FileUtils;
 import top.yixun.utils.MD5Utils;
+import top.yixun.utils.QRCodeUtils;
 /**
  * @Description: 用户相关操作接口实现
  * @author: YiYChao
@@ -24,6 +35,15 @@ public class UserServiceImpl implements UserService{
 	private UsersMapper usersMapper;
 	@Autowired
 	private Sid sid;
+	@Autowired
+	private QRCodeUtils qrCodeUtils;
+	@Autowired
+	private FastDFSClient fastDFSClient;
+	@Autowired
+	private MyFriendsMapper myFriendsMapper;
+	@Autowired
+	private FriendsRequestMapper friendsRequestMapper;
+	
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
@@ -47,10 +67,17 @@ public class UserServiceImpl implements UserService{
 		return rst;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public Users saveUser(Users user) throws Exception {
 		user.setPassword(MD5Utils.getMD5Str(user.getPassword()));	// 对用户密码进行加密
-		user.setQrcode("");	// 设置用户的二维码信息
+		
+		String codePath = "E:\\" + user.getUsername().hashCode() + "qrcode.png";		// 临时文件
+		qrCodeUtils.createQRCode(codePath, "yixun_code:" + user.getUsername());	// 生成二维码
+		MultipartFile qrcodeImg = FileUtils.fileToMultipart(codePath);			// 转换图片
+		String qrcodeUrl = fastDFSClient.uploadQRCode(qrcodeImg);
+		
+		user.setQrcode(qrcodeUrl);	// 设置用户的二维码信息
 		user.setId(sid.nextShort());	// 生成用户的主键
 		user.setFaceImage("");
 		user.setFaceImageBig("");
@@ -59,4 +86,66 @@ public class UserServiceImpl implements UserService{
 		return user;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED)
+	@Override
+	public Users updateUserInfo(Users user) {
+		usersMapper.updateByPrimaryKeySelective(user);		// 选择性更新用户信息
+		return usersMapper.selectByPrimaryKey(user.getId());	// 查询用户信息并返回
+	}
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public int queryFriendsByName(String userId, String friendName) {
+		Users friend = queryUserByUsername(friendName);
+		if(friend == null){		// 用户不存在
+			return SearchFriendsStatusEnum.USER_NOT_EXIST.status;
+		}else if(friend.getId().equals(userId)){	// 搜索用户为自己
+			return SearchFriendsStatusEnum.NOT_YOURSELF.status;
+		}
+		// 验证是否已经是好友
+		Example example = new Example(MyFriends.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("myUserId", userId);			// 用户id
+		criteria.andEqualTo("myFriendUserId", friend.getId());	// 好友id
+		MyFriends myFriends = myFriendsMapper.selectOneByExample(example);
+		
+		if(myFriends != null){	// 已经是好友
+			return SearchFriendsStatusEnum.ALREADY_FRIENDS.status;
+		}else{	// 还不是好友
+			return SearchFriendsStatusEnum.SUCCESS.status;
+		}
+	}
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public Users queryUserByUsername(String username) {
+		// 设置查询条件
+		Example example = new Example(Users.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("username", username);
+		
+		// 执行查询并返回
+		return usersMapper.selectOneByExample(example);
+	}
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public int addFriendRequest(String userId, String friendId) {
+		Example example = new Example(FriendsRequest.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("sendUserId", userId);
+		criteria.andEqualTo("acceptUserId", friendId);
+		FriendsRequest rst = friendsRequestMapper.selectOneByExample(example);
+		if(rst == null){
+			FriendsRequest request = new FriendsRequest();
+			request.setId(sid.nextShort());
+			request.setSendUserId(userId);
+			request.setAcceptUserId(friendId);
+			request.setRequestDateTime(new Date());
+			// 新增用户请求记录
+			return friendsRequestMapper.insert(request);
+		}else{
+			return 0;
+		}
+	}
 }

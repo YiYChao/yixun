@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="css/header.css" />
 	</head>
 		<header class="mui-bar mui-bar-nav title">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left title-color"></a>
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left title-color" style="touch-action: none;"></a>
 		    <a class="mui-icon mui-icon-more mui-icon-right-nav mui-pull-right title-color" id="a_openMenu"></a>
 		    <h1 class="mui-title title-color">我的头像</h1>
 		</header>
@@ -41,16 +41,12 @@
 		<script type="text/javascript">
 			mui.init()
 			mui.plusReady(function(){
-				var userInfo = app.getUserGlobalInfo();
-				var img_myface = document.getElementById("img_myface");
-				if(userInfo != null){
-					var faceImage = userInfo.faceImage;
-					if(faceImage != null){
-						if(app.isNotNull(faceImage)){
-							img_myface.src = app.imgServerUrl + faceImage;	// 设置图片的服务器地址
-						}
-					}
-				}
+				refreshFace();
+				// 添加自定义事件，刷新头像大图
+				window.addEventListener("refresh", function(){
+					refreshFace();
+				});
+				
 				// 获取手机端课件屏幕的尺寸
 				var windowWidth = document.body.clientWidth;
 				img_myface.width = windowWidth;
@@ -65,15 +61,51 @@
 				// 绑定选择照片事件
 				var a_chooseImg = document.getElementById("a_chooseImg");
 				a_chooseImg.addEventListener("tap", function(){
-					mui.openWindow("plugin/v3.1.6/myface-uploader.html", "myface-uploader.html");
+					mui.openWindow({
+						url: "plugin/v3.1.6/myface-uploader.html", 
+						id: "myface-uploader.html",
+						createNew: true		// 每次都打开新窗口，否则上次中断后会打不开
+					});
 					mui('#sheet-myface').popover('toggle');
 				});
 				// 绑定保存照片事件
 				var a_saveImg = document.getElementById("a_saveImg");
 				a_saveImg.addEventListener("tap", function(){
-					
+					plus.nativeUI.showWaiting("保存中...");
+					plus.downloader.createDownload(
+						app.imgServerUrl + app.getUserGlobalInfo().faceImageBig,
+						{},
+						function(download, status){
+							plus.nativeUI.closeWaiting();
+							mui('#sheet-myface').popover('toggle');
+							if(status == 200){
+								var fileName = download.filename;
+								// 通过相册API保头像到本地
+								plus.gallery.save(fileName, function(){
+									app.showToast("保存成功", "success");
+								});
+							}else{
+								app.showToast("保存失败！", "error");
+								console.log("保存头像失败!");
+							}
+						}
+					).start() // 开始下载任务
 				});
+				
 			});
+			
+			function refreshFace(){
+				var userInfo = app.getUserGlobalInfo();
+				var img_myface = document.getElementById("img_myface");
+				if(userInfo != null){
+					var faceImage = userInfo.faceImageBig;
+					if(faceImage != null){
+						if(app.isNotNull(faceImage)){
+							img_myface.src = app.imgServerUrl + faceImage;	// 设置图片的服务器地址
+						}
+					}
+				}
+			};
 		</script>
 	</body>
 

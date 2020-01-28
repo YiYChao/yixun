@@ -19,12 +19,24 @@
 	"yixun-me.html": {
 		"refer": [
 			"login.html",
-			"myface.html"
+			"myface.html",
+			"mynickname.html",
+			"myQRCode.html"
 		]
 	},
 	"myface.html": {
 		"refer": [
 			"plugin/v3.1.6/myface-uploader.html"
+		]
+	},
+	"yixun-discover.html": {
+		"refer": [
+			"searchFriends.html"
+		]
+	},
+	"searchFriends.html": {
+		"refer": [
+			"searchFriendsResult.html"
 		]
 	}
 }

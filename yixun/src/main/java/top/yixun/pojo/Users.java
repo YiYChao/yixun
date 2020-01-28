@@ -133,4 +133,11 @@ public class Users {
     public void setCid(String cid) {
         this.cid = cid;
     }
+
+	@Override
+	public String toString() {
+		return "Users [id=" + id + ", username=" + username + ", password=" + password + ", faceImage=" + faceImage
+				+ ", faceImageBig=" + faceImageBig + ", nickname=" + nickname + ", qrcode=" + qrcode + ", cid=" + cid
+				+ "]";
+	}
 }

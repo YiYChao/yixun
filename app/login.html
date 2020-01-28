@@ -110,6 +110,10 @@
 								} else {
 									app.showToast(data.msg, "error");
 								}
+							},
+							error:function(xhr,type,errorThrown){
+								//异常处理；
+								console.log(type);
 							}
 						});
 					}
