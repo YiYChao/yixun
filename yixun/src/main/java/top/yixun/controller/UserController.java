@@ -1,5 +1,7 @@
 package top.yixun.controller;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,6 +126,22 @@ public class UserController {
 			return YiXunJSONResult.ok();
 		}else{
 			return YiXunJSONResult.errorMsg(SearchFriendsStatusEnum.getMsgByKey(rst));	// 返回泛型的消息提示
+		}
+	}
+	
+	@PostMapping(value="/queryFriendRequests")
+	public YiXunJSONResult queryFriendRequests(@RequestBody UserBO userBo) throws Exception {
+		List<UserVo> rst = userService.queryFriendRequests(userBo.getUserId());
+		return YiXunJSONResult.ok(rst);
+	}
+	
+	@PostMapping(value="/dellFriendRequest")
+	public YiXunJSONResult dellFriendRequest(@RequestBody UserBO userBo) throws Exception {
+		int rst = userService.dellFriendRequest(userBo.getUserId(),userBo.getFriendId(), userBo.getOperType());
+		if(rst == 1){
+			return YiXunJSONResult.ok();
+		}else{
+			return YiXunJSONResult.errorMsg("操作失败！");
 		}
 	}
 }

@@ -11,6 +11,7 @@ public class UserBO {
     private String nickname;	// 用户昵称
     private String friendname;	// 好友名称
     private String friendId;	// 好友Id
+    private Integer operType;	// 处理好友请求的操作，0通过，1忽略
 	
     public String getUserId() {
 		return userId;
@@ -42,9 +43,15 @@ public class UserBO {
 	public void setFriendId(String friendId) {
 		this.friendId = friendId;
 	}
+	public Integer getOperType() {
+		return operType;
+	}
+	public void setOperType(Integer operType) {
+		this.operType = operType;
+	}
 	@Override
 	public String toString() {
 		return "UserBO [userId=" + userId + ", faceData=" + faceData + ", nickname=" + nickname + ", friendname="
-				+ friendname + ", friendId=" + friendId + "]";
+				+ friendname + ", friendId=" + friendId + ", operType=" + operType + "]";
 	}
 }

@@ -167,11 +167,19 @@
 			"yixun-discover.html": {
 				"resources": [],
 				"refer": [
-					"searchFriends.html"
+					"searchFriends.html",
+					"scanme.html"
 				],
 				"priority": 0
 			},
 			"searchFriends.html": {
+				"resources": [],
+				"refer": [
+					"searchFriendsResult.html"
+				],
+				"priority": 0
+			},
+			"scanme.html": {
 				"resources": [],
 				"refer": [
 					"searchFriendsResult.html"

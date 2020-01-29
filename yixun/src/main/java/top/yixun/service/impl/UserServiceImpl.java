@@ -1,7 +1,9 @@
 package top.yixun.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,13 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
+import top.yixun.enums.OperatorFriendRequestTypeEnum;
 import top.yixun.enums.SearchFriendsStatusEnum;
 import top.yixun.mapper.FriendsRequestMapper;
 import top.yixun.mapper.MyFriendsMapper;
 import top.yixun.mapper.UsersMapper;
+import top.yixun.mapper.UsersMapperCustom;
 import top.yixun.pojo.FriendsRequest;
 import top.yixun.pojo.MyFriends;
 import top.yixun.pojo.Users;
+import top.yixun.pojo.vo.UserVo;
 import top.yixun.service.UserService;
 import top.yixun.utils.FastDFSClient;
 import top.yixun.utils.FileUtils;
@@ -43,7 +48,8 @@ public class UserServiceImpl implements UserService{
 	private MyFriendsMapper myFriendsMapper;
 	@Autowired
 	private FriendsRequestMapper friendsRequestMapper;
-	
+	@Autowired
+	private UsersMapperCustom usersMapperCustom;
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
@@ -147,5 +153,60 @@ public class UserServiceImpl implements UserService{
 		}else{
 			return 0;
 		}
+	}
+
+	@Override
+	public List<UserVo> queryFriendRequests(String userId) {
+		return usersMapperCustom.queryFriendRequests(userId);
+	}
+
+	@Override
+	public int dellFriendRequest(String userId, String friendId, Integer operType) {
+		// 参数异常
+		if(StringUtils.isBlank(userId) || StringUtils.isBlank(friendId) || operType == null){
+			return 0;
+		}else{
+			// 删除申请记录
+			int rst = deleteFriendsRequest(userId, friendId);
+			// 通过好友申请
+			if(OperatorFriendRequestTypeEnum.PASS.type == operType){
+				// 双向添加好友
+				insertFriend(userId, friendId);
+				insertFriend(friendId, userId);
+			}
+			return rst;
+		}
+	}
+	
+	/**
+	 * @Description: 删除好友的申请记录
+	 * @param userId 当前用户（接收者）的主键id
+	 * @param friendId 好友（发送者）的主键id
+	 * @return 删除的记录数
+	 * @date 2020年1月29日 下午10:52:04
+	 */
+	private int deleteFriendsRequest(String userId, String friendId){
+		Example example = new Example(FriendsRequest.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("acceptUserId", userId);	// 当前用户（接收者）的id
+		criteria.andEqualTo("sendUserId", friendId);	// 发送这的id
+		int rst = friendsRequestMapper.deleteByExample(example);
+		return rst;
+	}
+	
+	/**
+	 * @Description: 添加好友记录
+	 * @param userId 用户id
+	 * @param friendId 好友id
+	 * @return 添加的记录数
+	 * @date 2020年1月29日 下午11:08:05
+	 * @throws
+	 */
+	private int insertFriend(String userId, String friendId){
+		MyFriends friend = new MyFriends();
+		friend.setId(sid.nextShort());
+		friend.setMyUserId(userId);
+		friend.setMyFriendUserId(friendId);
+		return myFriendsMapper.insert(friend);
 	}
 }

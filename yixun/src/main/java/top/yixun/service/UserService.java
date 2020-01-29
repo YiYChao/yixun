@@ -1,6 +1,9 @@
 package top.yixun.service;
 
+import java.util.List;
+
 import top.yixun.pojo.Users;
+import top.yixun.pojo.vo.UserVo;
 
 /**
  * @Description: 用户相关操作接口定义
@@ -69,5 +72,23 @@ public interface UserService {
 	 * @date 2020年1月28日 下午11:37:22
 	 */
 	int addFriendRequest(String userId, String friendId);
+
+	/**
+	 * @Description: 查询用户收到的好友请求
+	 * @param userId 当前用户的id
+	 * @return 请求添加的好友虚拟信息实体列表List<UserVo>
+	 * @date 2020年1月29日 下午9:59:28
+	 */
+	List<UserVo> queryFriendRequests(String userId);
+
+	/**
+	 * @Description: 处理好友申请
+	 * @param userId 当前用户的id
+	 * @param friendId 好友的id
+	 * @param operType 操作，0忽略，1同意
+	 * @return 操作的记录数
+	 * @date 2020年1月29日 下午10:42:17
+	 */
+	int dellFriendRequest(String userId, String friendId, Integer operType);
 	
 }

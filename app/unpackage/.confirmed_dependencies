@@ -31,10 +31,16 @@
 	},
 	"yixun-discover.html": {
 		"refer": [
-			"searchFriends.html"
+			"searchFriends.html",
+			"scanme.html"
 		]
 	},
 	"searchFriends.html": {
+		"refer": [
+			"searchFriendsResult.html"
+		]
+	},
+	"scanme.html": {
 		"refer": [
 			"searchFriendsResult.html"
 		]
