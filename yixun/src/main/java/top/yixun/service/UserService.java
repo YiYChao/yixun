@@ -90,5 +90,13 @@ public interface UserService {
 	 * @date 2020年1月29日 下午10:42:17
 	 */
 	int dellFriendRequest(String userId, String friendId, Integer operType);
+
+	/**
+	 * @Description: 查询当前用户的后好友列表
+	 * @param userId 当前用户的主键id
+	 * @return 当前用户的好友虚拟对象列表
+	 * @date 2020年1月30日 下午4:52:02
+	 */
+	List<UserVo> queryFriendsList(String userId);
 	
 }

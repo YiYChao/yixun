@@ -17,4 +17,12 @@ public interface UsersMapperCustom{
 	 * @date 2020年1月29日 下午9:48:33
 	 */
 	List<UserVo> queryFriendRequests(String userId);
+	
+	/**
+	 * @Description: 查询当前用户的好友列表
+	 * @param userId 当前用户的id
+	 * @return 虚拟用户对象列表List<UserVo>
+	 * @date 2020年1月30日 下午4:48:33
+	 */
+	List<UserVo> queryFriendsList(String userId);
 }

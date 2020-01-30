@@ -139,9 +139,20 @@ public class UserController {
 	public YiXunJSONResult dellFriendRequest(@RequestBody UserBO userBo) throws Exception {
 		int rst = userService.dellFriendRequest(userBo.getUserId(),userBo.getFriendId(), userBo.getOperType());
 		if(rst == 1){
-			return YiXunJSONResult.ok();
+			List<UserVo> friendList = userService.queryFriendsList(userBo.getUserId());	// 更新好友列表
+			return YiXunJSONResult.ok(friendList);
 		}else{
 			return YiXunJSONResult.errorMsg("操作失败！");
+		}
+	}
+	
+	@PostMapping(value="/myFriends")
+	public YiXunJSONResult myFriends(@RequestBody UserBO userBo) throws Exception {
+		if(StringUtils.isBlank(userBo.getUserId())){
+			return YiXunJSONResult.errorMsg("参数异常!");
+		}else{
+			List<UserVo> rst = userService.queryFriendsList(userBo.getUserId());
+			return YiXunJSONResult.ok(rst);
 		}
 	}
 }

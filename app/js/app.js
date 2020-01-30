@@ -3,7 +3,7 @@ window.app = {
 	/**
 	 * netty服务后端发布的url地址
 	 */
-	nettyServerUrl: 'ws://192.168.137.1:8086/ws',
+	nettyServerUrl: 'ws://192.168.43.218:8086/ws',
 	
 	/**
 	 * 后端服务发布的url地址

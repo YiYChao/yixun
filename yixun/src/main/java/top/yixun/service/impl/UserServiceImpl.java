@@ -209,4 +209,9 @@ public class UserServiceImpl implements UserService{
 		friend.setMyFriendUserId(friendId);
 		return myFriendsMapper.insert(friend);
 	}
+
+	@Override
+	public List<UserVo> queryFriendsList(String userId) {
+		return usersMapperCustom.queryFriendsList(userId);
+	}
 }

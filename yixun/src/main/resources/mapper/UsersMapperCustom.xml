@@ -6,4 +6,9 @@
 			SELECT DISTINCT friends_request.send_user_id FROM friends_request WHERE friends_request.accept_user_id = #{userId}
 		)
 	</select>
+	<select id="queryFriendsList" parameterType="java.lang.String" resultType="top.yixun.pojo.vo.UserVo">
+		SELECT id, username, nickname, face_image as faceImage FROM users WHERE users.id IN(
+			SELECT DISTINCT my_friends.my_friend_user_id FROM my_friends WHERE my_friends.my_user_id = #{userId}
+		)
+	</select>
 </mapper>

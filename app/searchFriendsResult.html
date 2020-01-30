@@ -54,6 +54,9 @@
 			mui.init();
 			
 			mui.plusReady(function(){
+				mui.back = function(){
+					mui.openWindow("index.html", "index.html");
+				};
 				
 				var user = app.getUserGlobalInfo();
 				
@@ -100,7 +103,8 @@
 				// 绑定返回的函数
 				var btn_back = document.getElementById("btn_back");
 				btn_back.addEventListener("tap", function() {
-					mui.back();
+//					mui.back();
+					mui.openWindow("index.html", "index.html");
 				});
 			});
 		</script>

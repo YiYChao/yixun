@@ -54,7 +54,11 @@
 				});
 				var li_scanme = document.getElementById("li_scanme");
 				li_scanme.addEventListener("tap", function(){
-					mui.openWindow("scanme.html","scanme.html");
+					mui.openWindow({
+						url : "scanme.html",
+						id : "scanme.html",
+						createNew: true		// 每次都打开新窗口，否则上次中断后会打不开
+					});
 				});
 			});
 		</script>

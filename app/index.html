@@ -18,7 +18,7 @@
 </head>
 <body>
 	<header class="mui-bar mui-bar-nav title">
-	    <h1 class="mui-title title-color">易讯</h1>
+	    <h1 class="mui-title title-color" id="yixun_title">易讯</h1>
 	</header>
 	
 	<nav class="mui-bar mui-bar-tab">
@@ -57,6 +57,9 @@
 				return false;
 			}
 			
+			// 对网络连接进行事件监听
+			netChangeSwitch();
+			
 			// 获取当前的webview对象
 			var currentWebview = plus.webview.currentWebview();
 			// 向当前主页对象追加4张webview对象子页
@@ -69,6 +72,9 @@
 			}
 			// 显示第一个页面
 			plus.webview.show(yixunArray[0].pageId);
+			
+			// 延时加载
+			setTimeout("initData()", "1000");
 		});
 		mui(".mui-bar-tab").on("tap", "a", function(){
 			var tabIndex = this.getAttribute("tabIndex");
@@ -80,6 +86,32 @@
 				}
 			}
 		},{passive: false});
+		
+		// 监听网络状态更改
+		function netChangeSwitch(){
+			document.addEventListener("netchange", function(){
+				// 网络状态获取和判断
+				var connectionStatus = plus.networkinfo.getCurrentType();
+				if (connectionStatus != 0 && connectionStatus != 1) {
+					// 重新打开网络连接
+					var yixun_title = document.getElementById("yixun_title");
+					yixun_title.innerHTML = "易 讯";
+				} else {
+					// 关闭网络连接
+					var yixun_title = document.getElementById("yixun_title");
+					yixun_title.innerHTML = "易 讯(未连接)";
+				}
+			});
+		}
+		
+		// 预加载
+		function initData() {
+			var yixun_chatlist = plus.webview.getWebviewById("yixun-chatlist.html");
+			mui.fire(yixun_chatlist, "refresh");
+			
+			var yixun_me = plus.webview.getWebviewById("yixun-me.html");
+			mui.fire(yixun_me, "refresh");
+		}
 	</script>
 	
 </body>

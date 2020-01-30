@@ -37,7 +37,12 @@
 			mui.init();
 			
 			mui.plusReady(function(){
-				setTimeout("startScan()", "500");
+				var currentWebview =  plus.webview.currentWebview();
+				currentWebview.addEventListener("show", function(){
+//					setTimeout("startScan()", "500");
+startScan();
+				});
+				
 			});
 			
 			var scan;	// 全局变量，下面两个方法是需要使用
@@ -94,6 +99,7 @@
 						});
 					}
 				}
+//				scan.start();
 			}
 		</script>
 	</body>

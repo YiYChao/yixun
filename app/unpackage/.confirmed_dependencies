@@ -44,5 +44,10 @@
 		"refer": [
 			"searchFriendsResult.html"
 		]
+	},
+	"yixun-contact.html": {
+		"refer": [
+			"chatting.html"
+		]
 	}
 }
