@@ -13,12 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
+import top.yixun.enums.MsgSignFlagEnum;
 import top.yixun.enums.OperatorFriendRequestTypeEnum;
 import top.yixun.enums.SearchFriendsStatusEnum;
+import top.yixun.mapper.ChatMsgMapper;
 import top.yixun.mapper.FriendsRequestMapper;
 import top.yixun.mapper.MyFriendsMapper;
 import top.yixun.mapper.UsersMapper;
 import top.yixun.mapper.UsersMapperCustom;
+import top.yixun.netty.ChatMsg;
 import top.yixun.pojo.FriendsRequest;
 import top.yixun.pojo.MyFriends;
 import top.yixun.pojo.Users;
@@ -50,6 +53,8 @@ public class UserServiceImpl implements UserService{
 	private FriendsRequestMapper friendsRequestMapper;
 	@Autowired
 	private UsersMapperCustom usersMapperCustom;
+	@Autowired
+	private ChatMsgMapper chatMsgMapper;
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
@@ -213,5 +218,25 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<UserVo> queryFriendsList(String userId) {
 		return usersMapperCustom.queryFriendsList(userId);
+	}
+
+	@Override
+	public String saveMsg(ChatMsg chatMsgVO) {
+		top.yixun.pojo.ChatMsg chatMsg = new top.yixun.pojo.ChatMsg();
+		String msgId = sid.nextShort();
+		chatMsg.setId(msgId);
+		chatMsg.setSendUserId(chatMsgVO.getSenderId());
+		chatMsg.setAcceptUserId(chatMsgVO.getReceiverId());
+		chatMsg.setMsg(chatMsgVO.getMsg());
+		chatMsg.setCreateTime(new Date());
+		chatMsg.setSignFlag(MsgSignFlagEnum.unsign.type);	// 消息未签收
+		
+		chatMsgMapper.insert(chatMsg);		// 向数据库新增记录
+		return msgId;	// 返回消息的主键id
+	}
+
+	@Override
+	public void updateMsgSigned(List<String> msgIdList) {
+		usersMapperCustom.updateMsgSigned(msgIdList);
 	}
 }

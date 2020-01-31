@@ -2,6 +2,7 @@ package top.yixun.service;
 
 import java.util.List;
 
+import top.yixun.netty.ChatMsg;
 import top.yixun.pojo.Users;
 import top.yixun.pojo.vo.UserVo;
 
@@ -98,5 +99,20 @@ public interface UserService {
 	 * @date 2020年1月30日 下午4:52:02
 	 */
 	List<UserVo> queryFriendsList(String userId);
+
+	/**
+	 * @Description: 保存聊天消息
+	 * @param chatMsg 自定义的聊天信息实体
+	 * @return 消息的主键id
+	 * @date 2020年1月31日 下午8:04:50
+	 */
+	String saveMsg(ChatMsg chatMsg);
+
+	/**
+	 * @Description: 将消息设置为签收状态
+	 * @param msgIdList 消息的主键列表
+	 * @date 2020年1月31日 下午8:12:50
+	 */
+	void updateMsgSigned(List<String> msgIdList);
 	
 }

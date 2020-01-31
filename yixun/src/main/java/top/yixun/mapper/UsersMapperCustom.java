@@ -25,4 +25,12 @@ public interface UsersMapperCustom{
 	 * @date 2020年1月30日 下午4:48:33
 	 */
 	List<UserVo> queryFriendsList(String userId);
+
+	/**
+	 * @Description: 批量签收消息
+	 * @param msgIdList
+	 * @date 2020年1月31日 下午8:20:02
+	 * @throws
+	 */
+	void updateMsgSigned(List<String> msgIdList);
 }
