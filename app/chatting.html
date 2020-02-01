@@ -153,6 +153,7 @@
 						
 						// 保存聊天历史记录到本地缓存
 						app.saveUserChatHistory(me.id, friendUserId, msg_text_val, 1);
+						// 创建聊天快照
 						app.saveUserChatSnapshot(me.id, friendUserId, msg_text_val, true);
 						
 						// 保存聊天历史记录到本地缓存

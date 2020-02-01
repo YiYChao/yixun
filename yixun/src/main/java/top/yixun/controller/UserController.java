@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import top.yixun.enums.SearchFriendsStatusEnum;
+import top.yixun.pojo.ChatMsg;
 import top.yixun.pojo.Users;
 import top.yixun.pojo.bo.UserBO;
 import top.yixun.pojo.vo.UserVo;
@@ -152,6 +153,16 @@ public class UserController {
 			return YiXunJSONResult.errorMsg("参数异常!");
 		}else{
 			List<UserVo> rst = userService.queryFriendsList(userBo.getUserId());
+			return YiXunJSONResult.ok(rst);
+		}
+	}
+	
+	@PostMapping(value="/getUnReadMsgList")
+	public YiXunJSONResult getUnReadMsgList(@RequestBody UserBO userBo) throws Exception {
+		if(StringUtils.isBlank(userBo.getUserId())){
+			return YiXunJSONResult.errorMsg("参数异常!");
+		}else{
+			List<ChatMsg> rst = userService.queryUnReadMsgList(userBo.getUserId());
 			return YiXunJSONResult.ok(rst);
 		}
 	}

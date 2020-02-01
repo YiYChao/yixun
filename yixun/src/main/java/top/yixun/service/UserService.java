@@ -114,5 +114,13 @@ public interface UserService {
 	 * @date 2020年1月31日 下午8:12:50
 	 */
 	void updateMsgSigned(List<String> msgIdList);
+
+	/**
+	 * @Description: 批量获取用户的未读聊天记录
+	 * @param userId 用户id
+	 * @return 聊天记录实体列表
+	 * @date 2020年2月1日 上午10:37:58
+	 */
+	List<top.yixun.pojo.ChatMsg> queryUnReadMsgList(String userId);
 	
 }

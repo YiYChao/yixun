@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
+import top.yixun.enums.MsgActionEnum;
 import top.yixun.enums.MsgSignFlagEnum;
 import top.yixun.enums.OperatorFriendRequestTypeEnum;
 import top.yixun.enums.SearchFriendsStatusEnum;
@@ -22,6 +25,8 @@ import top.yixun.mapper.MyFriendsMapper;
 import top.yixun.mapper.UsersMapper;
 import top.yixun.mapper.UsersMapperCustom;
 import top.yixun.netty.ChatMsg;
+import top.yixun.netty.DataContent;
+import top.yixun.netty.UserChannelRel;
 import top.yixun.pojo.FriendsRequest;
 import top.yixun.pojo.MyFriends;
 import top.yixun.pojo.Users;
@@ -29,6 +34,7 @@ import top.yixun.pojo.vo.UserVo;
 import top.yixun.service.UserService;
 import top.yixun.utils.FastDFSClient;
 import top.yixun.utils.FileUtils;
+import top.yixun.utils.JsonUtils;
 import top.yixun.utils.MD5Utils;
 import top.yixun.utils.QRCodeUtils;
 /**
@@ -160,11 +166,13 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 
+	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public List<UserVo> queryFriendRequests(String userId) {
 		return usersMapperCustom.queryFriendRequests(userId);
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public int dellFriendRequest(String userId, String friendId, Integer operType) {
 		// 参数异常
@@ -178,6 +186,14 @@ public class UserServiceImpl implements UserService{
 				// 双向添加好友
 				insertFriend(userId, friendId);
 				insertFriend(friendId, userId);
+				
+				Channel sendChannel = UserChannelRel.get(userId);
+				if (sendChannel != null) {
+					// 使用websocket主动推送消息到请求发起者，更新他的通讯录列表为最新
+					DataContent dataContent = new DataContent();
+					dataContent.setAction(MsgActionEnum.PULL_FRIEND.type);
+					sendChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(dataContent)));
+				}
 			}
 			return rst;
 		}
@@ -190,11 +206,12 @@ public class UserServiceImpl implements UserService{
 	 * @return 删除的记录数
 	 * @date 2020年1月29日 下午10:52:04
 	 */
+	@Transactional(propagation = Propagation.REQUIRED)
 	private int deleteFriendsRequest(String userId, String friendId){
 		Example example = new Example(FriendsRequest.class);
 		Criteria criteria = example.createCriteria();
 		criteria.andEqualTo("acceptUserId", userId);	// 当前用户（接收者）的id
-		criteria.andEqualTo("sendUserId", friendId);	// 发送这的id
+		criteria.andEqualTo("sendUserId", friendId);	// 发送者的id
 		int rst = friendsRequestMapper.deleteByExample(example);
 		return rst;
 	}
@@ -207,6 +224,7 @@ public class UserServiceImpl implements UserService{
 	 * @date 2020年1月29日 下午11:08:05
 	 * @throws
 	 */
+	@Transactional(propagation = Propagation.REQUIRED)
 	private int insertFriend(String userId, String friendId){
 		MyFriends friend = new MyFriends();
 		friend.setId(sid.nextShort());
@@ -215,11 +233,13 @@ public class UserServiceImpl implements UserService{
 		return myFriendsMapper.insert(friend);
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public List<UserVo> queryFriendsList(String userId) {
 		return usersMapperCustom.queryFriendsList(userId);
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public String saveMsg(ChatMsg chatMsgVO) {
 		top.yixun.pojo.ChatMsg chatMsg = new top.yixun.pojo.ChatMsg();
@@ -235,8 +255,20 @@ public class UserServiceImpl implements UserService{
 		return msgId;	// 返回消息的主键id
 	}
 
+	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public void updateMsgSigned(List<String> msgIdList) {
 		usersMapperCustom.updateMsgSigned(msgIdList);
+	}
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public List<top.yixun.pojo.ChatMsg> queryUnReadMsgList(String userId) {
+		Example example = new Example(top.yixun.pojo.ChatMsg.class);
+		Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("acceptUserId", userId);
+		criteria.andEqualTo("signFlag", MsgSignFlagEnum.unsign.type);
+		List<top.yixun.pojo.ChatMsg> list = chatMsgMapper.selectByExample(example);
+		return list;
 	}
 }

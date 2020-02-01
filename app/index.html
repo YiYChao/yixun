@@ -53,9 +53,25 @@
 		};
 		mui.plusReady(function(){
 			// 禁止返回到登录注册页面
-			mui.back = function() {
-				return false;
-			}
+//			mui.back = function() {
+//				return false;
+//			}
+			// 双击返回退出应用
+			var first = null;            
+			var oldback = mui.back;            
+			mui.back = function() {               
+				if(!first) {                  
+					first = new Date().getTime();                  
+					mui.toast('再按一次退出应用');                  
+					setTimeout(function() {                     
+						first = null;                  
+					}, 2000);               
+				} else {                  
+					if(new Date().getTime() - first < 2000) {                     
+						plus.runtime.quit();                  
+					}               
+				}            
+			};
 			
 			// 对网络连接进行事件监听
 			netChangeSwitch();

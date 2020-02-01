@@ -22,7 +22,7 @@
 				<div class="wrap-login100 p-t-85 p-b-20">
 					<form id="userform" method="post">
 						<span class="login100-form-title p-b-70">
-							<h5>Netty 实战</h5>
+							<h5>易讯轻聊</h5>
 						</span>
 						<span class="login100-form-avatar">
 							<img id="img_login_face" src="css/registLogin/arrow.jpg" alt="风间影月">
@@ -51,6 +51,22 @@
 		<script type="text/javascript">
 			
 			mui.plusReady(function() {
+				// 双击返回退出应用
+				var first = null;            
+				var oldback = mui.back;            
+				mui.back = function() {               
+					if(!first) {                  
+						first = new Date().getTime();                  
+						mui.toast('再按一次退出应用');                  
+						setTimeout(function() {                     
+							first = null;                  
+						}, 2000);               
+					} else {                  
+						if(new Date().getTime() - first < 2000) {                     
+							plus.runtime.quit();                  
+						}               
+					}            
+				};
 				
 				// 判断用户是否注册登录过，如果本地内存有全局的用户对象，此时直接跳转到首页
 				var userInfo = app.getUserGlobalInfo();

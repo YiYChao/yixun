@@ -26,7 +26,7 @@ import top.yixun.utils.JsonUtils;
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
 	// 用于记录和管理所有客户端的channle
-	private static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+	public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {

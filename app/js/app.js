@@ -6,9 +6,9 @@ window.app = {
 	nettyServerUrl: 'ws://192.168.43.218:8086/ws',
 	
 	/**
-	 * 后端服务发布的url地址
+	 * 后端服务发布的url地址192.168.43.218
 	 */
-	serverUrl: 'http://192.168.43.218:8085',
+	serverUrl: 'http://192.168.43.218:8085/',
 	
 	/**
 	 * 图片服务器的url地址
@@ -98,7 +98,7 @@ window.app = {
 			var contactList = JSON.parse(contactListStr);
 			for (var i = 0 ; i < contactList.length ; i ++) {
 				var friend = contactList[i];
-				if (friend.friendUserId == friendId) {
+				if (friend.id == friendId) {
 					return friend;
 					break;
 				}
@@ -201,7 +201,7 @@ window.app = {
 		var singleMsg = new me.ChatSnapshot(myId, friendId, msg, isRead);
 		
 		// 向list中追加快照对象
-		chatSnapshotList.unshift(singleMsg);
+		chatSnapshotList.unshift(singleMsg);	// 新增记录到数组的开头
 		
 		plus.storage.setItem(chatKey, JSON.stringify(chatSnapshotList));
 	},
